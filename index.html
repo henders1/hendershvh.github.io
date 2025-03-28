@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HENDERS HVH SHIT</title>
+    <!-- Prevent crypto wallet injection errors -->
+    <script>
+      if (typeof window.ethereum !== 'undefined') delete window.ethereum;
+      if (typeof window.solana !== 'undefined') delete window.solana;
+    </script>
     <style>
         body {
             background-color: #121212;
@@ -13,7 +18,7 @@
             margin: 0 auto;
             padding: 20px;
             line-height: 1.6;
-            cursor: pointer; /* Shows users the page is clickable */
+            cursor: pointer; /* Shows the page is clickable */
         }
         
         h1 {
@@ -162,7 +167,7 @@
         </div>
     </div>
     
-    <!-- Audio Element - REPLACE "music.mp3" WITH YOUR ACTUAL FILENAME -->
+    <!-- Audio Element - REPLACE "background.mp3" WITH YOUR EXACT FILENAME -->
     <audio id="bgMusic" loop>
         <source src="background.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
@@ -176,21 +181,21 @@
         // Set initial volume
         music.volume = volumeSlider.value;
         
-        // Enable audio after any user interaction
-        document.body.addEventListener('click', function initAudio() {
-            // Try to play music (will work after user interaction)
+        // Enable audio after first user interaction
+        function initAudio() {
             music.play().then(() => {
-                console.log("Music playback started");
+                console.log("Music started successfully");
             }).catch(e => {
-                console.log("Playback failed:", e);
+                console.log("Playback failed:", e.message);
             });
-            
-            // Remove this listener after first click
+            // Remove this after first interaction
             document.body.removeEventListener('click', initAudio);
-        }, { once: true });
+        }
+        document.body.addEventListener('click', initAudio);
         
+        // Manual controls
         function playMusic() {
-            music.play().catch(e => console.log("Playback prevented:", e));
+            music.play().catch(e => console.log("Play error:", e));
         }
         
         function pauseMusic() {
