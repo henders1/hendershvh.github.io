@@ -13,6 +13,7 @@
             margin: 0 auto;
             padding: 20px;
             line-height: 1.6;
+            cursor: pointer; /* Shows users the page is clickable */
         }
         
         h1 {
@@ -41,9 +42,9 @@
         }
         
         .hvh-info {
-            color: #bb86fc; /* Changed to match the purple color */
-            font-weight: bold; /* Added to match weight */
-            font-size: 1.2em; /* Matched size */
+            color: #bb86fc;
+            font-weight: bold;
+            font-size: 1.2em;
         }
         
         .link-buttons {
@@ -161,6 +162,7 @@
         </div>
     </div>
     
+    <!-- Audio Element - REPLACE "music.mp3" WITH YOUR ACTUAL FILENAME -->
     <audio id="bgMusic" loop>
         <source src="background.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
@@ -173,6 +175,19 @@
         
         // Set initial volume
         music.volume = volumeSlider.value;
+        
+        // Enable audio after any user interaction
+        document.body.addEventListener('click', function initAudio() {
+            // Try to play music (will work after user interaction)
+            music.play().then(() => {
+                console.log("Music playback started");
+            }).catch(e => {
+                console.log("Playback failed:", e);
+            });
+            
+            // Remove this listener after first click
+            document.body.removeEventListener('click', initAudio);
+        }, { once: true });
         
         function playMusic() {
             music.play().catch(e => console.log("Playback prevented:", e));
